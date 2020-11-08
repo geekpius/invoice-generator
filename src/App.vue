@@ -1,27 +1,23 @@
 <template>
   <v-app>
-    <Navbar />
-    <v-main>
-      <v-container>
-      <!-- <SignIn /> -->
-      </v-container>
+    <Navbar v-show="$route.meta.requiresAuth" />
+
+    <v-main class="bg-color">
+      <router-view></router-view>
     </v-main>
+    <Footer v-show="$route.meta.requiresAuth" />
   </v-app>
 </template>
 
 <script>
-// import SignIn from "@/views/SignIn.vue";
 import Navbar from "@/components/Navbar.vue";
-
+import Footer from "@/components/Footer.vue";
 export default {
   name: "App",
   components: {
-    // SignIn,
-    Navbar
+    Navbar,
+    Footer
   },
-
-  data: () => ({
-    //
-  })
+  data: () => ({})
 };
 </script>
