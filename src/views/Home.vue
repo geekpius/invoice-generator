@@ -10,6 +10,9 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {};
+  }
 };
 </script>

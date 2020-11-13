@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <Navbar v-show="$route.meta.requiresAuth" />
+    <Navbar v-if="$route.meta.showMenubar" />
 
     <v-main class="bg-color">
       <router-view></router-view>
     </v-main>
-    <Footer v-show="$route.meta.requiresAuth" />
+    <Footer v-if="$route.meta.showMenubar" />
   </v-app>
 </template>
 

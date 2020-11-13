@@ -1,14 +1,68 @@
 <template>
   <nav>
     <v-app-bar color="purple darken-2" dark app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+        v-if="$route.meta.requiresAuth"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Invoice</span> &nbsp;
         <span>Generator</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-menu offset-y transition="scale-transition">
+      <v-menu
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-width="200"
+        offset-x
+        v-if="!$route.meta.requiresAuth"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="indigo pl-5 pr-5" dark v-bind="attrs" v-on="on">
+            <v-icon left>mdi-login-variant</v-icon>
+            Log In
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>Sign in with</v-list-item-title>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list-item>
+              <v-list-item-title>
+                <v-btn color="primary" block>
+                  <v-icon left>
+                    mdi-google
+                  </v-icon>
+                  Google
+                </v-btn>
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list-item>
+              <v-list-item-title>
+                <v-btn color="primary" block>
+                  <v-icon left>
+                    mdi-facebook
+                  </v-icon>
+                  Facebook
+                </v-btn>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-menu>
+
+      <v-menu
+        offset-y
+        transition="scale-transition"
+        v-if="$route.meta.requiresAuth"
+      >
         <template v-slot:activator="{ on }">
           <v-btn icon text v-on="on" class="mr-5">
             <v-badge :content="3" :value="3" color="green" overlap>
@@ -18,7 +72,11 @@
         </template>
       </v-menu>
 
-      <v-menu offset-y transition="scale-transition">
+      <v-menu
+        offset-y
+        transition="scale-transition"
+        v-if="$route.meta.requiresAuth"
+      >
         <template v-slot:activator="{ on }">
           <v-btn text v-on="on" class="pl-5 pr-5">
             <v-icon left>mdi-chevron-down</v-icon>
@@ -42,7 +100,7 @@
       </v-menu>
     </v-app-bar>
 
-    <Sidebar :drawer="drawer" />
+    <Sidebar :drawer="drawer" v-if="$route.meta.requiresAuth" />
   </nav>
 </template>
 
@@ -55,53 +113,7 @@ export default {
   },
   data: () => ({
     drawer: true,
-    menuGroupLinks: [
-      {
-        icon: "mdi-account-supervisor",
-        title: "Accounts",
-        active: false,
-        menuGroupLinks: [
-          { title: "Users", route: { name: "User" } },
-          { title: "Roles", route: { name: "User" } }
-        ]
-      },
-      {
-        icon: "mdi-tag-multiple",
-        title: "Inventories",
-        route: { name: "Inventory" },
-        menuGroupLinks: [{ title: "Users" }, { title: "Roles" }]
-      },
-      {
-        icon: "mdi-account-supervisor-circle",
-        title: "Suppliers",
-        route: { name: "Supplier" },
-        menuGroupLinks: [{ title: "Users" }, { title: "Roles" }]
-      },
-      {
-        icon: "mdi-sale",
-        title: "Sales",
-        route: { name: "Sale" },
-        menuGroupLinks: [{ title: "Users" }, { title: "Roles" }]
-      },
-      {
-        icon: "mdi-handshake-outline",
-        title: "Transactions",
-        route: { name: "Transaction" },
-        menuGroupLinks: [{ title: "Users" }, { title: "Roles" }]
-      }
-    ],
-    menuSingleLinks: [
-      {
-        icon: "mdi-view-dashboard",
-        text: "Dashboard",
-        route: { name: "Dashboard" }
-      },
-      {
-        icon: "mdi-cog",
-        text: "Settings",
-        route: { name: "Setting" }
-      }
-    ],
+    menu: false,
     menus: [
       { text: "Your Profile", icon: "mdi-account-circle", route: "/profile" },
       { text: "Help", icon: "mdi-help-circle", route: "/help" },

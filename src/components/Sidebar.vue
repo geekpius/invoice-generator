@@ -100,12 +100,6 @@ export default {
         text: "Dashboard",
         route: { name: "Dashboard" }
       }
-    ],
-    menus: [
-      { text: "Your Profile", icon: "mdi-account-circle", route: "/profile" },
-      { text: "Help", icon: "mdi-help-circle", route: "/help" },
-      { text: "Settings", icon: "mdi-cog", route: "/settings" },
-      { text: "Sign Out", icon: "mdi-logout-variant", route: "/signout" }
     ]
   })
 };
