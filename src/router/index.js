@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import Signin from "../views/auths/SignIn.vue";
+import Signup from "../views/auths/SignUp.vue";
 import Forgotten from "../views/auths/ForgottenPassword.vue";
 import Dashboard from "../views/users/Dashboard.vue";
 
@@ -21,6 +23,18 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
+  },
+  {
+    path: "/sign-in",
+    name: "Signin",
+    component: Signin,
+    meta: { requiresAuth: false, showMenubar: false }
+  },
+  {
+    path: "/sign-up",
+    name: "Signup",
+    component: Signup,
+    meta: { requiresAuth: false, showMenubar: false }
   },
   {
     path: "/forgotten",

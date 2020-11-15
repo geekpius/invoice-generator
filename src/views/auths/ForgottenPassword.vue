@@ -22,6 +22,14 @@
         <v-spacer></v-spacer>
         <v-btn class="info" type="submit">Reset Password</v-btn>
       </v-card-actions>
+
+      <v-divider></v-divider>
+      <v-card-actions>
+        <span
+          >Already have an account?
+          <router-link :to="{ name: 'Signin' }">Sign in</router-link></span
+        >
+      </v-card-actions>
     </v-form>
   </v-card>
 </template>

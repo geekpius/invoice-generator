@@ -5,9 +5,9 @@
         <v-avatar size="100">
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-avatar>
-        <p class="white--text subheading mt-1 text-center">geek</p>
+        <p class="white--text subheading mt-1 text-center">{{ user }}</p>
         <p class="white--text text-center">
-          <small>Logged in at 3:05pm</small>
+          <small>Logged in {{ user }}</small>
         </p>
       </v-flex>
     </v-layout>
@@ -101,7 +101,13 @@ export default {
         route: { name: "Dashboard" }
       }
     ]
-  })
+  }),
+  computed: {
+    user() {
+      // let user = JSON.parse(this.$store.state.auth.user);
+      return "username";
+    }
+  }
 };
 </script>
 

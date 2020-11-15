@@ -11,52 +11,15 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-menu
-        v-model="menu"
-        :close-on-content-click="false"
-        :nudge-width="200"
-        offset-x
+      <v-btn
+        color="indigo pl-5 pr-5"
+        dark
         v-if="!$route.meta.requiresAuth"
+        @click="$router.push({ name: 'Signin' })"
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="indigo pl-5 pr-5" dark v-bind="attrs" v-on="on">
-            <v-icon left>mdi-login-variant</v-icon>
-            Log In
-          </v-btn>
-        </template>
-
-        <v-card>
-          <v-list>
-            <v-list-item>
-              <v-list-item-title>Sign in with</v-list-item-title>
-            </v-list-item>
-            <v-divider></v-divider>
-            <v-list-item>
-              <v-list-item-title>
-                <v-btn color="primary" block>
-                  <v-icon left>
-                    mdi-google
-                  </v-icon>
-                  Google
-                </v-btn>
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-divider></v-divider>
-
-            <v-list-item>
-              <v-list-item-title>
-                <v-btn color="primary" block>
-                  <v-icon left>
-                    mdi-facebook
-                  </v-icon>
-                  Facebook
-                </v-btn>
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-menu>
+        <v-icon left>mdi-login-variant</v-icon>
+        Log In
+      </v-btn>
 
       <v-menu
         offset-y
@@ -91,10 +54,17 @@
             :to="link.route"
             active-class="border"
           >
-            <v-list-tile-action v-if="link.icon" class="mr-2">
+            <v-list-item-action v-if="link.icon" class="mr-2">
               <v-icon size="20">{{ link.icon }}</v-icon>
-            </v-list-tile-action>
+            </v-list-item-action>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="logout">
+            <v-list-item-action class="mr-2">
+              <v-icon size="20">mdi-logout-variant</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -117,10 +87,14 @@ export default {
     menus: [
       { text: "Your Profile", icon: "mdi-account-circle", route: "/profile" },
       { text: "Help", icon: "mdi-help-circle", route: "/help" },
-      { text: "Settings", icon: "mdi-cog", route: "/settings" },
-      { text: "Sign Out", icon: "mdi-logout-variant", route: "/signout" }
+      { text: "Settings", icon: "mdi-cog", route: "/settings" }
     ]
-  })
+  }),
+  methods: {
+    logout() {
+      this.$store.dispatch("logoutUser");
+    }
+  }
 };
 </script>
 
