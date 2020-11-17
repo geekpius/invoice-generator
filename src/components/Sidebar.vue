@@ -5,9 +5,9 @@
         <v-avatar size="100">
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-avatar>
-        <p class="white--text subheading mt-1 text-center">{{ user }}</p>
+        <p class="white--text subheading mt-1 text-center">{{ user.name }}</p>
         <p class="white--text text-center">
-          <small>Logged in {{ user }}</small>
+          <small>Something</small>
         </p>
       </v-flex>
     </v-layout>
@@ -37,7 +37,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-group
+      <!-- <v-list-group
         v-for="item in menuGroupLinks"
         :key="item.title"
         v-model="item.active"
@@ -62,7 +62,7 @@
             <v-list-item-title v-text="child.title"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list-group>
+      </v-list-group> -->
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -104,9 +104,12 @@ export default {
   }),
   computed: {
     user() {
-      // let user = JSON.parse(this.$store.state.auth.user);
-      return "username";
+      return this.$store.getters["auth/getCurrentUser"];
     }
+  },
+  created() {
+    let token = localStorage.getItem("token");
+    this.$store.dispatch("auth/getAuthUser", token);
   }
 };
 </script>

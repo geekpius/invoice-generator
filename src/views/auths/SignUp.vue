@@ -3,35 +3,34 @@
     <v-card-title>
       <h1 class="display-1 info--text">Sign Up</h1>
     </v-card-title>
-    <div class="text-center error--text" v-if="error">{{ error }}</div>
     <v-form @submit.prevent="register">
       <v-card-text>
         <v-text-field
           v-validate="{ required: true, max: 60 }"
-          v-model="info.name"
+          v-model="formData.name"
           name="name"
           label="Full Name"
           prepend-icon="mdi-account"
         />
-        <span class="error--text ml-8" v-if="submitted">{{
+        <span class="error--text ml-8" v-if="isSubmitted">{{
           errors.first("name")
         }}</span>
 
         <v-text-field
           v-validate="{ required: true, email: true }"
-          v-model="info.email"
+          v-model="formData.email"
           name="email"
           label="Email"
           type="email"
           prepend-icon="mdi-email"
         />
-        <span class="error--text ml-8" v-if="submitted">{{
+        <span class="error--text ml-8" v-if="isSubmitted">{{
           errors.first("email")
         }}</span>
 
         <v-text-field
           v-validate="{ required: true, min: 6 }"
-          v-model="info.password"
+          v-model="formData.password"
           name="password"
           label="Password"
           :type="showPassword ? 'text' : 'password'"
@@ -39,7 +38,7 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="showPassword = !showPassword"
         />
-        <span class="error--text ml-8" v-if="submitted">{{
+        <span class="error--text ml-8" v-if="isSubmitted">{{
           errors.first("password")
         }}</span>
       </v-card-text>
@@ -66,26 +65,26 @@ export default {
   title: "Sign up",
   data: () => ({
     showPassword: false,
-    info: {
+    formData: {
       name: null,
       email: null,
       password: null
     },
-    submitted: false
+    isSubmitted: false
   }),
   methods: {
     async register() {
-      this.submitted = true;
+      this.isSubmitted = true;
       let result = await this.$validator.validate();
       if (result) {
-        this.$store.dispatch("registerUser", this.info);
-        this.submitted = true;
+        this.$store.dispatch("auth/registerUser", this.formData).then(() => {
+          this.$router.push({ name: "Dashboard" });
+        });
+        this.formData.email = null;
+        this.formData.name = null;
+        this.formData.password = null;
+        this.isSubmitted = false;
       }
-    }
-  },
-  computed: {
-    error() {
-      return this.$store.state.auth.error;
     }
   }
 };

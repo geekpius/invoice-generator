@@ -7,13 +7,21 @@
 <script>
 import Heading from "@/components/Heading.vue";
 export default {
-  name: "Dashboard",
-  title: "Dashboard",
+  name: "Profile",
+  title: "Profile",
   components: {
     Heading
   },
   data: () => ({
-    heading: "Dashboard"
-  })
+    heading: "Profile"
+  }),
+  created() {
+    this.$store.dispatch("users/fetchProfile");
+  },
+  computed: {
+    users() {
+      return this.$store.state.users.profile;
+    }
+  }
 };
 </script>

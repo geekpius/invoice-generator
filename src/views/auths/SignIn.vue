@@ -13,7 +13,7 @@
           type="email"
           prepend-icon="mdi-email"
         />
-        <span class="error--text ml-8" v-if="submitted">{{
+        <span class="error--text ml-8" v-if="isSubmitted">{{
           errors.first("email")
         }}</span>
 
@@ -27,7 +27,7 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="showPassword = !showPassword"
         />
-        <span class="error--text ml-8" v-if="submitted">{{
+        <span class="error--text ml-8" v-if="isSubmitted">{{
           errors.first("password")
         }}</span>
       </v-card-text>
@@ -67,15 +67,19 @@ export default {
       email: null,
       password: null
     },
-    submitted: false
+    isSubmitted: false
   }),
   methods: {
     async login() {
-      this.submitted = true;
+      this.isSubmitted = true;
       let result = await this.$validator.validate();
       if (result) {
-        this.$store.dispatch("loginUser", this.credentials);
-        this.submitted = true;
+        this.$store.dispatch("auth/loginUser", this.credentials).then(() => {
+          this.$router.push({ name: "Dashboard" });
+        });
+        this.credentials.email = null;
+        this.credentials.password = null;
+        this.isSubmitted = false;
       }
     }
   }

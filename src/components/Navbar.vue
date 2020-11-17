@@ -3,7 +3,7 @@
     <v-app-bar color="purple darken-2" dark app>
       <v-app-bar-nav-icon
         @click.stop="drawer = !drawer"
-        v-if="$route.meta.requiresAuth"
+        v-if="isLoggedIn"
       ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Invoice</span> &nbsp;
@@ -14,18 +14,14 @@
       <v-btn
         color="indigo pl-5 pr-5"
         dark
-        v-if="!$route.meta.requiresAuth"
+        v-if="!isLoggedIn"
         @click="$router.push({ name: 'Signin' })"
       >
         <v-icon left>mdi-login-variant</v-icon>
         Log In
       </v-btn>
 
-      <v-menu
-        offset-y
-        transition="scale-transition"
-        v-if="$route.meta.requiresAuth"
-      >
+      <v-menu offset-y transition="scale-transition" v-if="isLoggedIn">
         <template v-slot:activator="{ on }">
           <v-btn icon text v-on="on" class="mr-5">
             <v-badge :content="3" :value="3" color="green" overlap>
@@ -35,11 +31,7 @@
         </template>
       </v-menu>
 
-      <v-menu
-        offset-y
-        transition="scale-transition"
-        v-if="$route.meta.requiresAuth"
-      >
+      <v-menu offset-y transition="scale-transition" v-if="isLoggedIn">
         <template v-slot:activator="{ on }">
           <v-btn text v-on="on" class="pl-5 pr-5">
             <v-icon left>mdi-chevron-down</v-icon>
@@ -70,7 +62,7 @@
       </v-menu>
     </v-app-bar>
 
-    <Sidebar :drawer="drawer" v-if="$route.meta.requiresAuth" />
+    <Sidebar :drawer="drawer" v-if="isLoggedIn" />
   </nav>
 </template>
 
@@ -85,14 +77,25 @@ export default {
     drawer: true,
     menu: false,
     menus: [
-      { text: "Your Profile", icon: "mdi-account-circle", route: "/profile" },
+      {
+        text: "Your Profile",
+        icon: "mdi-account-circle",
+        route: { name: "Profile" }
+      },
       { text: "Help", icon: "mdi-help-circle", route: "/help" },
       { text: "Settings", icon: "mdi-cog", route: "/settings" }
     ]
   }),
   methods: {
     logout() {
-      this.$store.dispatch("logoutUser");
+      this.$store.dispatch("auth/logoutUser").then(() => {
+        this.$router.push({ name: "Signin" });
+      });
+    }
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["auth/isLoggedIn"];
     }
   }
 };
