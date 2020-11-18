@@ -12,19 +12,21 @@ export default {
     }
   },
   actions: {
-    fetchProfile: async ({ commit }) => {
-      try {
-        let accessToken = localStorage.getItem("token");
-        let response = await axios.get(`${BASE_URL}/auth/profile/`, {
+    fetchProfile: ({ commit }) => {
+      let accessToken = localStorage.getItem("token");
+      axios
+        .get(`${BASE_URL}/auth/profile/`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json"
           }
+        })
+        .then(response => {
+          commit("SET_PROFILE", response.data);
+        })
+        .catch(error => {
+          console.log(error);
         });
-        commit("SET_PROFILE", response.data);
-      } catch (error) {
-        console.log(error);
-      }
     }
   }
 };
