@@ -5,24 +5,20 @@ export default {
   state: {
     accessToken: localStorage.getItem("token") || null,
     refreshToken: localStorage.getItem("refresh") || null,
-    currentUser: localStorage.getItem("user") || null,
-    error: null
+    currentUser: localStorage.getItem("user") || { name: "" }
   },
   getters: {
     isLoggedIn: state => {
       return state.accessToken !== null;
     },
     getCurrentUser: state => {
-      return JSON.parse(state.currentUser) || { name: "" };
+      return JSON.parse(state.currentUser);
     }
   },
   mutations: {
-    // SET_ERROR(state, errorMessage) {
-    //   state.error = errorMessage;
-    // },
     SET_TOKEN: (state, payload) => {
-      state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
+      state.accessToken = payload.access;
+      state.refreshToken = payload.resfresh;
     },
     SET_USER(state, payload) {
       state.user = payload;
@@ -67,32 +63,29 @@ export default {
           });
       });
     },
-    logoutUser: () => {
-      return new Promise((resolve, reject) => {
-        let accessToken = localStorage.getItem("token");
-        let refreshToken = localStorage.getItem("refresh");
-        axios
-          .post(
-            `${BASE_URL}/auth/logout/`,
-            { refresh: refreshToken },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json"
-              }
+    logoutUser: async ({ commit }) => {
+      let accessToken = localStorage.getItem("token");
+      let refreshToken = localStorage.getItem("refresh");
+      try {
+        let response = await axios.post(
+          `${BASE_URL}/auth/logout/`,
+          { refresh: refreshToken },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json"
             }
-          )
-          .then(response => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh");
-            localStorage.removeItem("user");
-            resolve(response);
-          })
-          .catch(error => {
-            console.log(error);
-            reject(error);
-          });
-      });
+          }
+        );
+        commit("SET_TOKEN", { access: null, refresh: null });
+        commit("SET_USER", null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
     },
     getAuthUser: ({ commit }, token) => {
       axios

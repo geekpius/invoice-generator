@@ -5,7 +5,7 @@
         <v-avatar size="100">
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-avatar>
-        <p class="white--text subheading mt-1 text-center">{{ user.name }}</p>
+        <p class="white--text subheading mt-1 text-center">Name</p>
         <p class="white--text text-center">
           <small>Something</small>
         </p>
