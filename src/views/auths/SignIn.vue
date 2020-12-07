@@ -77,8 +77,6 @@ export default {
         this.$store.dispatch("auth/loginUser", this.credentials).then(() => {
           this.$router.push({ name: "Dashboard" });
         });
-        this.credentials.email = null;
-        this.credentials.password = null;
         this.isSubmitted = false;
       }
     }

@@ -5,11 +5,27 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import titleMixin from "./mixins/titleMixin";
 import VeeValidate from "vee-validate";
+// import axios from "axios";
 
 Vue.config.productionTip = false;
 
 Vue.mixin(titleMixin);
 Vue.use(VeeValidate);
+
+// axios.interceptors.response.use(
+//   response => {
+//     return response;
+//   },
+//   error => {
+//     return new Promise(function(resolve, reject) {
+//       if (error.response.status == 401) {
+//         this.store.dispatch("auth/clearLogin");
+//       }
+//       // return Promise.reject(error);
+//       return reject(error);
+//     });
+//   }
+// );
 
 router.beforeEach((to, from, next) => {
   let isLoggedIn = store.getters["auth/isLoggedIn"];

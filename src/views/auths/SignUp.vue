@@ -80,9 +80,6 @@ export default {
         this.$store.dispatch("auth/registerUser", this.formData).then(() => {
           this.$router.push({ name: "Dashboard" });
         });
-        this.formData.email = null;
-        this.formData.name = null;
-        this.formData.password = null;
         this.isSubmitted = false;
       }
     }
