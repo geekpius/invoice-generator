@@ -5,7 +5,7 @@
         <v-avatar size="100">
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-avatar>
-        <p class="white--text subheading mt-1 text-center">{{ user.name }}</p>
+        <p class="white--text subheading mt-1 text-center">Username</p>
         <p class="white--text text-center">
           <small>Something</small>
         </p>
@@ -36,33 +36,6 @@
           <v-list-item-title>{{ link.text }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
-      <!-- <v-list-group
-        v-for="item in menuGroupLinks"
-        :key="item.title"
-        v-model="item.active"
-        :prepend-icon="item.icon"
-        no-action
-        active-class="white--text"
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item
-          v-for="child in item.menuGroupLinks"
-          :key="child.title"
-          router
-          :to="child.route"
-          active-class="border white--text"
-        >
-          <v-list-item-content>
-            <v-list-item-title v-text="child.title"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group> -->
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -77,38 +50,36 @@ export default {
     }
   },
   data: () => ({
-    menuGroupLinks: [
-      {
-        icon: "mdi-account-supervisor",
-        title: "Accounts",
-        active: false,
-        menuGroupLinks: [
-          { title: "Users", route: { name: "User" } },
-          { title: "Roles", route: { name: "User" } }
-        ]
-      },
-      {
-        icon: "mdi-tag-multiple",
-        title: "Inventories",
-        route: { name: "Inventory" },
-        menuGroupLinks: [{ title: "Users" }, { title: "Roles" }]
-      }
-    ],
     menuSingleLinks: [
       {
         icon: "mdi-view-dashboard",
         text: "Dashboard",
         route: { name: "Dashboard" }
+      },
+      {
+        icon: "mdi-receipt",
+        text: "Material Description",
+        route: { name: "Description" }
+      },
+      {
+        icon: "mdi-file-cog",
+        text: "Generate Invoice",
+        route: { name: "Generate" }
+      },
+      {
+        icon: "mdi-table-large",
+        text: "List Invoices",
+        route: { name: "ListMaterial" }
       }
     ]
   }),
   computed: {
-    user() {
-      return this.$store.getters["auth/getCurrentUser"];
-    }
+    // user() {
+    //   return this.$store.getters["auth/getCurrentUser"];
+    // }
   },
   created() {
-    this.$store.dispatch("auth/getAuthUser");
+    // this.$store.dispatch("auth/getAuthUser");
   }
 };
 </script>

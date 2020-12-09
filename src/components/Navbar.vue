@@ -51,7 +51,7 @@
             </v-list-item-action>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
           </v-list-item>
-
+          <v-divider></v-divider>
           <v-list-item @click="logout">
             <v-list-item-action class="mr-2">
               <v-icon size="20">mdi-logout-variant</v-icon>
@@ -83,7 +83,7 @@ export default {
         route: { name: "Profile" }
       },
       { text: "Help", icon: "mdi-help-circle", route: "/help" },
-      { text: "Settings", icon: "mdi-cog", route: "/settings" }
+      { text: "Settings", icon: "mdi-cog", route: { name: "Settings" } }
     ]
   }),
   methods: {

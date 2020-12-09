@@ -6,6 +6,10 @@ import Signup from "../views/auths/SignUp.vue";
 import Forgotten from "../views/auths/ForgottenPassword.vue";
 import Dashboard from "../views/users/Dashboard.vue";
 import Profile from "../views/users/Profile.vue";
+import Settings from "../views/users/Settings.vue";
+import Description from "../views/users/Description.vue";
+import Generate from "../views/users/Generate.vue";
+import ListMaterial from "../views/users/ListMaterial.vue";
 
 Vue.use(VueRouter);
 
@@ -54,6 +58,30 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    meta: { requiresAuth: true, showMenubar: true }
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
+    meta: { requiresAuth: true, showMenubar: true }
+  },
+  {
+    path: "/material-descriptions",
+    name: "Description",
+    component: Description,
+    meta: { requiresAuth: true, showMenubar: true }
+  },
+  {
+    path: "/generate-invoice",
+    name: "Generate",
+    component: Generate,
+    meta: { requiresAuth: true, showMenubar: true }
+  },
+  {
+    path: "/list-material-invoices",
+    name: "ListMaterial",
+    component: ListMaterial,
     meta: { requiresAuth: true, showMenubar: true }
   }
 ];

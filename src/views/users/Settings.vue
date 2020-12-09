@@ -3,16 +3,16 @@
     <Heading :head-text="heading" />
 
     <v-tabs v-model="tab">
-      <v-tab>ACCOUNT</v-tab>
-      <v-tab>INFORMATION</v-tab>
+      <v-tab>NOTIFICATIONS</v-tab>
+      <v-tab>PERCENTAGE RATES</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <Account />
+        <div>Under Construction</div>
       </v-tab-item>
       <v-tab-item>
-        <Information />
+        <Rates />
       </v-tab-item>
     </v-tabs-items>
   </div>
@@ -20,32 +20,22 @@
 
 <script>
 import Heading from "@/components/Heading.vue";
-import Account from "@/components/profile/Account.vue";
-import Information from "@/components/profile/Information.vue";
+import Rates from "@/components/settings/Rates.vue";
 export default {
-  name: "Profile",
-  title: "Profile",
+  name: "Settings",
+  title: "Settings",
   components: {
     Heading,
-    Account,
-    Information
+    Rates
   },
   data() {
     return {
-      heading: "Profile",
+      heading: "Settings",
       tab: null,
       items: ["ACCOUNT", "INFORMATION"],
       text:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     };
-  },
-  created() {
-    this.$store.dispatch("users/fetchProfile");
-  },
-  computed: {
-    user() {
-      return this.$store.getters["users/getProfile"];
-    }
   }
 };
 </script>

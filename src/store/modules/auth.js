@@ -3,25 +3,25 @@ export default {
   namespaced: true,
   state: {
     accessToken: localStorage.getItem("token") || null,
-    refreshToken: localStorage.getItem("refresh") || null,
-    currentUser: localStorage.getItem("user") || null
+    refreshToken: localStorage.getItem("refresh") || null
+    // currentUser: localStorage.getItem("user") || null
   },
   getters: {
     isLoggedIn: state => {
       return state.accessToken !== null;
-    },
-    getCurrentUser: state => {
-      return JSON.parse(state.currentUser) || { name: "Fiifi Pius" };
     }
+    // getCurrentUser: state => {
+    //   return JSON.parse(state.currentUser) || { name: "Fiifi Pius" };
+    // }
   },
   mutations: {
     SET_TOKEN: (state, payload) => {
       state.accessToken = payload.access;
       state.refreshToken = payload.resfresh;
-    },
-    SET_USER(state, payload) {
-      state.user = payload;
     }
+    // SET_USER(state, payload) {
+    //   state.user = payload;
+    // }
   },
   actions: {
     registerUser: async ({ commit }, formInfo) => {
@@ -69,16 +69,16 @@ export default {
         return error;
       }
     },
-    getAuthUser: async ({ commit }) => {
-      try {
-        let response = await http.get("auth/user/");
-        localStorage.setItem("user", JSON.stringify(response.data));
-        commit("SET_USER", JSON.stringify(response.data));
-        return response;
-      } catch (error) {
-        return error;
-      }
-    },
+    // getAuthUser: async ({ commit }) => {
+    //   try {
+    //     let response = await http.get("auth/user/");
+    //     localStorage.setItem("user", JSON.stringify(response.data));
+    //     commit("SET_USER", JSON.stringify(response.data));
+    //     return response;
+    //   } catch (error) {
+    //     return error;
+    //   }
+    // },
     clearLogin: async ({ commit }) => {
       commit("SET_TOKEN", { access: null, refresh: null });
       commit("SET_USER", null);
