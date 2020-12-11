@@ -1,6 +1,9 @@
 <template>
   <v-form @submit.prevent="updateInformation">
     <v-card-text>
+      <span class="error--text" v-if="isSubmitted">{{
+        errors.first("vat")
+      }}</span>
       <v-text-field
         v-validate="{
           required: true,
@@ -11,11 +14,13 @@
         name="vat"
         label="VAT"
         type="number"
+        outlined
+        dense
       />
-      <span class="error--text" v-if="isSubmitted">{{
-        errors.first("vat")
-      }}</span>
 
+      <span class="error--text" v-if="isSubmitted">{{
+        errors.first("discount")
+      }}</span>
       <v-text-field
         v-validate="{
           required: true,
@@ -26,14 +31,13 @@
         name="discount"
         label="DISCOUNT"
         type="number"
+        outlined
+        dense
       />
-      <span class="error--text" v-if="isSubmitted">{{
-        errors.first("discount")
-      }}</span>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn class="info pl-8 pr-8" type="submit">
+      <v-btn class="info pl-8 pr-8 ml-2" type="submit">
         <v-icon left>mdi-cached</v-icon> Update</v-btn
       >
     </v-card-actions>

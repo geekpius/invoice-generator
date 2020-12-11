@@ -5,9 +5,9 @@
         <v-avatar size="100">
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-avatar>
-        <p class="white--text subheading mt-1 text-center">Username</p>
+        <p class="white--text subheading mt-1 text-center">{{ user.name }}</p>
         <p class="white--text text-center">
-          <small>Something</small>
+          <small>{{ user.last_login }}</small>
         </p>
       </v-flex>
     </v-layout>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Navbar",
   props: {
@@ -74,12 +75,12 @@ export default {
     ]
   }),
   computed: {
+    ...mapGetters({
+      user: "auth/getCurrentUser"
+    })
     // user() {
     //   return this.$store.getters["auth/getCurrentUser"];
     // }
-  },
-  created() {
-    // this.$store.dispatch("auth/getAuthUser");
   }
 };
 </script>

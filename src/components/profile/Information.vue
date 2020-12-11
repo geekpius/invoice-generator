@@ -2,14 +2,19 @@
   <div>
     <div class="pt-4">
       <v-card elevation="2">
-        <v-card-title>Profile Information</v-card-title>
+        <v-card-title>Company Information</v-card-title>
         <v-card-text>
           <v-row no-gutters>
             <v-col cols="12" sm="3">
               <InformationLogo />
             </v-col>
             <v-col cols="12" sm="6">
-              <InformationForm />
+              <InformationForm
+                :form-values="userProfile"
+                @updateProfile="updateProfile"
+                :is-success="isSuccess"
+                :response-msg="responseMsg"
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -21,28 +26,41 @@
 <script>
 import InformationForm from "@/components/profile/InformationForm.vue";
 import InformationLogo from "@/components/profile/InformationLogo.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "Information",
   components: {
     InformationForm,
     InformationLogo
   },
-  data: () => ({
-    formData: {
-      email: null,
-      name: null,
-      phone: null,
-      location: null,
-      address: null,
-      digital_address: null
-    },
-    isSubmitted: false
-  }),
+  data() {
+    return {
+      isSuccess: false,
+      responseMsg: ""
+    };
+  },
   methods: {
-    async updateInformation() {
-      this.isSubmitted = true;
-      await this.$validator.validate();
+    getProfile() {
+      this.$store.dispatch("users/fetchProfile");
+    },
+    async updateProfile(formData) {
+      try {
+        await this.$store.dispatch("users/updateProfile", formData);
+        this.isSuccess = true;
+        this.responseMsg = "Profile updated successful";
+      } catch (error) {
+        this.isSuccess = false;
+        this.responseMsg = "Profile update failed";
+      }
     }
+  },
+  created() {
+    this.getProfile();
+  },
+  computed: {
+    ...mapGetters({
+      userProfile: "users/getProfile"
+    })
   }
 };
 </script>

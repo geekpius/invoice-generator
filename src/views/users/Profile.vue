@@ -4,7 +4,7 @@
 
     <v-tabs v-model="tab">
       <v-tab>ACCOUNT</v-tab>
-      <v-tab>INFORMATION</v-tab>
+      <v-tab>COMPANY INFORMATION</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
@@ -33,19 +33,16 @@ export default {
   data() {
     return {
       heading: "Profile",
-      tab: null,
-      items: ["ACCOUNT", "INFORMATION"],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+      tab: null
     };
   },
   created() {
-    this.$store.dispatch("users/fetchProfile");
+    // this.$store.dispatch("users/fetchProfile");
   },
   computed: {
-    user() {
-      return this.$store.getters["users/getProfile"];
-    }
+    // user() {
+    //   return this.$store.getters["users/getProfile"];
+    // }
   }
 };
 </script>

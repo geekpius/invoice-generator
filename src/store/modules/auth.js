@@ -1,61 +1,70 @@
 import http from "../http";
+import axios from "axios";
+const BASE_URL = process.env.VUE_APP_BASE_URL;
+
 export default {
   namespaced: true,
   state: {
     accessToken: localStorage.getItem("token") || null,
-    refreshToken: localStorage.getItem("refresh") || null
-    // currentUser: localStorage.getItem("user") || null
+    refreshToken: localStorage.getItem("refresh") || null,
+    currentUser: localStorage.getItem("user") || null
   },
   getters: {
     isLoggedIn: state => {
       return state.accessToken !== null;
+    },
+    getCurrentUser: state => {
+      return JSON.parse(state.currentUser);
     }
-    // getCurrentUser: state => {
-    //   return JSON.parse(state.currentUser) || { name: "Fiifi Pius" };
-    // }
   },
   mutations: {
     SET_TOKEN: (state, payload) => {
       state.accessToken = payload.access;
       state.refreshToken = payload.resfresh;
+    },
+    SET_USER(state, payload) {
+      state.user = payload;
     }
-    // SET_USER(state, payload) {
-    //   state.user = payload;
-    // }
   },
   actions: {
-    registerUser: async ({ commit }, formInfo) => {
+    registerUser: async ({ commit, dispatch }, formInfo) => {
       try {
         let response = http.post("auth/register/", formInfo);
         localStorage.setItem("token", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
         commit("SET_TOKEN", response.data);
+        dispatch("getAuthUser", response.data.access);
         return response;
       } catch (error) {
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
         commit("SET_TOKEN", { access: null, refresh: null });
+        commit("SET_USER", null);
         return error;
       }
     },
-    loginUser: async ({ commit }, credentials) => {
+    loginUser: async ({ commit, dispatch }, credentials) => {
       try {
         let response = await http.post("auth/token/", credentials);
         localStorage.setItem("token", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
         commit("SET_TOKEN", response.data);
+        dispatch("getAuthUser", response.data.access);
         return response;
       } catch (error) {
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
         commit("SET_TOKEN", { access: null, refresh: null });
+        commit("SET_USER", null);
         return error;
       }
     },
     logoutUser: async ({ commit }) => {
       let refreshToken = localStorage.getItem("refresh");
       try {
-        let response = await http.post("/auth/logout/", {
+        let response = await http.post("auth/logout/", {
           refresh: refreshToken
         });
         commit("SET_TOKEN", { access: null, refresh: null });
@@ -69,16 +78,19 @@ export default {
         return error;
       }
     },
-    // getAuthUser: async ({ commit }) => {
-    //   try {
-    //     let response = await http.get("auth/user/");
-    //     localStorage.setItem("user", JSON.stringify(response.data));
-    //     commit("SET_USER", JSON.stringify(response.data));
-    //     return response;
-    //   } catch (error) {
-    //     return error;
-    //   }
-    // },
+    getAuthUser: async ({ commit }, token) => {
+      try {
+        let response = await axios.get(`${BASE_URL}auth/user/`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        localStorage.setItem("user", JSON.stringify(response.data));
+        commit("SET_USER", JSON.stringify(response.data));
+      } catch (error) {
+        return error;
+      }
+    },
     clearLogin: async ({ commit }) => {
       commit("SET_TOKEN", { access: null, refresh: null });
       commit("SET_USER", null);
