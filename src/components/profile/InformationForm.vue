@@ -8,70 +8,58 @@
     >
     <v-form @submit.prevent="updateProfile">
       <v-card-text>
-        <span class="error--text" v-if="isSubmitted">{{
-          errors.first("name")
-        }}</span>
         <v-text-field
           v-validate="{ required: true }"
           v-model="formValues.name"
           name="name"
           label="Company Name"
-          outlined
-          dense
         />
-
         <span class="error--text" v-if="isSubmitted">{{
-          errors.first("email")
+          errors.first("name")
         }}</span>
+
         <v-text-field
           v-validate="{ required: true, email: true }"
           v-model="formValues.email"
           name="email"
           label="Company Email"
           type="email"
-          outlined
-          dense
         />
-
         <span class="error--text" v-if="isSubmitted">{{
-          errors.first("phone")
+          errors.first("email")
         }}</span>
+
         <v-text-field
           v-validate="{ required: true, digits: 10 }"
           v-model="formValues.phone"
           name="phone"
           label="Company Phone"
           type="number"
-          outlined
-          dense
         />
-
         <span class="error--text" v-if="isSubmitted">{{
-          errors.first("location")
+          errors.first("phone")
         }}</span>
+
         <v-text-field
           v-validate="{ required: true }"
           v-model="formValues.location"
           name="location"
           label="Company Location"
-          outlined
-          dense
         />
+        <span class="error--text" v-if="isSubmitted">{{
+          errors.first("location")
+        }}</span>
 
         <v-text-field
           v-model="formValues.address"
           name="address"
           label="Company Address"
-          outlined
-          dense
         />
 
         <v-text-field
           v-model="formValues.digital_address"
           name="digital_address"
           label="Company Digital Address"
-          outlined
-          dense
         />
       </v-card-text>
 

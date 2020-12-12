@@ -3,6 +3,13 @@
     <v-card-title>
       <h1 class="display-1 info--text">Sign In</h1>
     </v-card-title>
+    <div v-if="responseText" class="ml-4 text-center">
+      <span v-if="responseText.success" class="success--text">{{
+        responseText.success
+      }}</span>
+      <span v-else class="error--text">{{ responseText.error }}</span>
+    </div>
+
     <v-form @submit.prevent="login">
       <v-card-text>
         <v-text-field
@@ -34,7 +41,9 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn class="info pl-8 pr-8" type="submit">Sign In</v-btn>
+        <v-btn class="info pl-8 pr-8" :disabled="isSubmitted" type="submit"
+          >Sign In</v-btn
+        >
       </v-card-actions>
 
       <v-divider></v-divider>
@@ -58,6 +67,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Signin",
   title: "Sign in",
@@ -75,11 +85,19 @@ export default {
       let result = await this.$validator.validate();
       if (result) {
         this.$store.dispatch("auth/loginUser", this.credentials).then(() => {
-          this.$router.push({ name: "Dashboard" });
+          let timeOut = setTimeout(() => {
+            clearTimeout(timeOut);
+            this.$router.push({ name: "Dashboard" });
+          }, 1000);
         });
         this.isSubmitted = false;
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      responseText: "auth/getTesponseText"
+    })
   }
 };
 </script>

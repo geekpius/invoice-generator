@@ -3,6 +3,12 @@
     <v-card-title>
       <h1 class="display-1 info--text">Sign Up</h1>
     </v-card-title>
+    <div v-if="responseText" class="ml-4 text-center">
+      <span v-if="responseText.success" class="success--text">{{
+        responseText.success
+      }}</span>
+      <span v-else class="error--text">{{ responseText.error }}</span>
+    </div>
     <v-form @submit.prevent="register">
       <v-card-text>
         <v-text-field
@@ -60,6 +66,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Signup",
   title: "Sign up",
@@ -70,19 +77,26 @@ export default {
       email: null,
       password: null
     },
-    isSubmitted: false
+    isSubmitted: false,
+    isSuccess: false
   }),
   methods: {
     async register() {
       this.isSubmitted = true;
       let result = await this.$validator.validate();
       if (result) {
-        this.$store.dispatch("auth/registerUser", this.formData).then(() => {
-          this.$router.push({ name: "Dashboard" });
-        });
+        this.$store.dispatch("auth/registerUser", this.formData);
+        this.formData.name = null;
+        this.formData.email = null;
+        this.formData.password = null;
         this.isSubmitted = false;
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      responseText: "auth/getTesponseText"
+    })
   }
 };
 </script>

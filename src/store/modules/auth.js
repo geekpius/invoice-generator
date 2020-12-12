@@ -7,9 +7,13 @@ export default {
   state: {
     accessToken: localStorage.getItem("token") || null,
     refreshToken: localStorage.getItem("refresh") || null,
-    currentUser: localStorage.getItem("user") || null
+    currentUser: localStorage.getItem("user") || JSON.stringify({}),
+    responseText: null
   },
   getters: {
+    getTesponseText: state => {
+      return state.responseText;
+    },
     isLoggedIn: state => {
       return state.accessToken !== null;
     },
@@ -18,29 +22,31 @@ export default {
     }
   },
   mutations: {
+    SET_RESPONSETEXT: (state, payload) => {
+      state.responseText = payload;
+    },
     SET_TOKEN: (state, payload) => {
       state.accessToken = payload.access;
-      state.refreshToken = payload.resfresh;
+      state.refreshToken = payload.refresh;
     },
     SET_USER(state, payload) {
       state.user = payload;
     }
   },
   actions: {
-    registerUser: async ({ commit, dispatch }, formInfo) => {
+    registerUser: async ({ commit }, payload) => {
       try {
-        let response = http.post("auth/register/", formInfo);
-        localStorage.setItem("token", response.data.access);
-        localStorage.setItem("refresh", response.data.refresh);
-        commit("SET_TOKEN", response.data);
-        dispatch("getAuthUser", response.data.access);
+        let response = await http.post("auth/register/", payload);
+        commit("SET_RESPONSETEXT", {
+          success: "Signed up successful. You can now sign in."
+        });
         return response;
       } catch (error) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("user");
-        commit("SET_TOKEN", { access: null, refresh: null });
-        commit("SET_USER", null);
+        if (error.response.data.email) {
+          commit("SET_RESPONSETEXT", {
+            error: error.response.data.email[0]
+          });
+        }
         return error;
       }
     },
@@ -53,6 +59,11 @@ export default {
         dispatch("getAuthUser", response.data.access);
         return response;
       } catch (error) {
+        if (error.response.data.detail) {
+          commit("SET_RESPONSETEXT", {
+            error: "Invalid credentials were given."
+          });
+        }
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
         localStorage.removeItem("user");
@@ -93,7 +104,7 @@ export default {
     },
     clearLogin: async ({ commit }) => {
       commit("SET_TOKEN", { access: null, refresh: null });
-      commit("SET_USER", null);
+      commit("SET_USER", {});
       localStorage.removeItem("token");
       localStorage.removeItem("refresh");
       localStorage.removeItem("user");

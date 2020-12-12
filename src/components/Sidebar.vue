@@ -78,9 +78,6 @@ export default {
     ...mapGetters({
       user: "auth/getCurrentUser"
     })
-    // user() {
-    //   return this.$store.getters["auth/getCurrentUser"];
-    // }
   }
 };
 </script>

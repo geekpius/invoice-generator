@@ -7,9 +7,6 @@
       >{{ responseMsg }}</span
     >
     <v-form @submit.prevent="updateUser">
-      <span class="error--text" v-if="isSubmitted">{{
-        errors.first("email")
-      }}</span>
       <v-card-text>
         <v-text-field
           v-validate="{ required: true, email: true }"
@@ -18,21 +15,20 @@
           label="Email"
           type="email"
           readonly
-          outlined
-          dense
         />
-
         <span class="error--text" v-if="isSubmitted">{{
-          errors.first("name")
+          errors.first("email")
         }}</span>
+
         <v-text-field
           v-validate="{ required: true }"
           v-model="formData.name"
           name="name"
           label="Name"
-          outlined
-          dense
         />
+        <span class="error--text" v-if="isSubmitted">{{
+          errors.first("name")
+        }}</span>
       </v-card-text>
 
       <v-card-actions>
