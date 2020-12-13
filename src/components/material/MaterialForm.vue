@@ -13,6 +13,12 @@
         <v-card-text>
           <v-container>
             <v-row>
+              <span
+                class="ml-4"
+                :class="isSuccess ? 'success--text' : 'error--text'"
+                v-if="isSuccess"
+                >{{ responseText }}</span
+              >
               <v-col cols="12">
                 <v-text-field
                   v-validate="{ required: true }"
@@ -29,7 +35,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" class="mr-3" text @click="saveMaterial">
+          <v-btn
+            color="blue darken-1"
+            class="mr-3"
+            :disabled="isBtnClicked"
+            text
+            @click="saveMaterial"
+          >
             Save
           </v-btn>
           <v-btn color="error darken-1" text @click="dialog = false">
@@ -43,15 +55,32 @@
 
 <script>
 export default {
-  data: () => ({
-    dialog: false,
-    material: null,
-    isSubmitted: false
-  }),
+  name: "MaterialForm",
+  data() {
+    return {
+      dialog: false,
+      material: null,
+      isSubmitted: false,
+      isBtnClicked: false,
+      isSuccess: false,
+      responseText: ""
+    };
+  },
   methods: {
     async saveMaterial() {
       this.isSubmitted = true;
-      await this.$validator.validate();
+      this.isBtnClicked = true;
+      let results = await this.$validator.validate();
+      if (results) {
+        await this.$store.dispatch("materials/saveMaterial", {
+          name: this.material
+        });
+        this.responseText = "Material profile saved successful";
+        this.isSuccess = true;
+        this.isSubmitted = false;
+        this.isBtnClicked = false;
+        this.material = null;
+      }
     }
   }
 };

@@ -7,22 +7,32 @@ export default {
     materialDescriptionList: []
   },
   getters: {
+    getMaterialNames: state => {
+      return state.materialList.map(material => material.name);
+    },
     getMaterialList: state => {
       return state.materialList;
     },
-    materialDescriptionList: state => {
+    getMaterialDescriptionList: state => {
       return state.materialDescriptionList;
     }
   },
   mutations: {
     SET_MATERIAL_LIST: (state, payload) => {
-      state.materialList = payload;
+      state.materialList.push(...payload);
+    },
+    SET_MATERIAL: (state, payload) => {
+      state.materialList.push(payload);
     },
     SET_MATERIAL_DESCRIPTION_LIST: (state, payload) => {
-      state.materialDescriptionList = payload;
+      state.materialDescriptionList.push(...payload);
+    },
+    SET_MATERIAL_DESCRIPTION: (state, payload) => {
+      state.materialDescriptionList.push(payload);
     }
   },
   actions: {
+    //Material profile
     fetchMaterial: async ({ commit }) => {
       try {
         let response = await http.get("material-profiles/");
@@ -31,10 +41,32 @@ export default {
         return error;
       }
     },
-    updatePercentage: async ({ commit }, payload) => {
+    saveMaterial: async ({ commit }, payload) => {
       try {
-        let response = await http.put("settings/percentages/", payload);
-        commit("SET_PERCENTAGE", response.data);
+        let response = await http.post("material-profiles/", payload);
+        commit("SET_MATERIAL", response.data);
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+
+    //Material profile descriptions
+    fetchMaterialDescription: async ({ commit }) => {
+      try {
+        let response = await http.get("material-profiles/descriptions/");
+        commit("SET_MATERIAL_DESCRIPTION_LIST", response.data);
+      } catch (error) {
+        return error;
+      }
+    },
+    saveMaterialDescription: async ({ commit }, payload) => {
+      try {
+        let response = await http.post(
+          "material-profiles/descriptions/",
+          payload
+        );
+        commit("SET_MATERIAL_DESCRIPTION", response.data);
         return response;
       } catch (error) {
         return error;

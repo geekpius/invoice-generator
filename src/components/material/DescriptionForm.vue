@@ -1,7 +1,13 @@
 <template>
-  <v-form @submit.prevent="updateInformation">
+  <v-form @submit.prevent="saveMaterialDescription">
     <v-card-text>
-      <v-select :items="items" label="Material Profile"></v-select>
+      <v-select
+        :items="getMaterialNames"
+        v-validate="{ required: true }"
+        name="profile"
+        v-model="formData.profile"
+        label="Material Profile"
+      ></v-select>
       <span class="error--text" v-if="isSubmitted">{{
         errors.first("profile")
       }}</span>
@@ -21,18 +27,17 @@
           required: true,
           decimal: 2
         }"
-        v-model="formData.price"
-        name="price"
+        v-model="formData.unit_price"
+        name="unit_price"
         label="Unit Price"
         type="number"
       />
       <span class="error--text" v-if="isSubmitted">{{
-        errors.first("price")
+        errors.first("unit_price")
       }}</span>
     </v-card-text>
-
     <v-card-actions>
-      <v-btn class="info pl-8 pr-8" type="submit">
+      <v-btn class="info pl-8 pr-8" :disabled="isBtnClicked" type="submit">
         <v-icon left>mdi-check-circle</v-icon> Add New</v-btn
       >
     </v-card-actions>
@@ -42,19 +47,46 @@
 <script>
 export default {
   name: "DescriptionForm",
-  data: () => ({
-    items: ["Foo", "Bar", "Fizz", "Buzz"],
-    formData: {
-      profile: null,
-      description: null,
-      price: null
-    },
-    isSubmitted: false
-  }),
+  props: {
+    materialNames: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      formData: {
+        profile: null,
+        description: null,
+        unit_price: null
+      },
+      isSubmitted: false,
+      isBtnClicked: false
+    };
+  },
   methods: {
-    async updateInformation() {
+    async saveMaterialDescription() {
       this.isSubmitted = true;
-      await this.$validator.validate();
+      this.isBtnClicked = true;
+      let results = await this.$validator.validate();
+      if (results) {
+        await this.$store.dispatch(
+          "materials/saveMaterialDescription",
+          this.formData
+        );
+        this.isSubmitted = false;
+        this.isBtnClicked = false;
+        this.formData.profile = null;
+        this.formData.description = null;
+        this.formData.unit_price = null;
+      } else {
+        this.isBtnClicked = false;
+      }
+    }
+  },
+  computed: {
+    getMaterialNames() {
+      return this.materialNames;
     }
   }
 };
