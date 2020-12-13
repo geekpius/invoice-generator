@@ -41,43 +41,43 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   name: "Navbar",
   props: {
     drawer: {
       type: Boolean,
       required: true
+    },
+    user: {
+      type: Object,
+      required: true
     }
   },
-  data: () => ({
-    menuSingleLinks: [
-      {
-        icon: "mdi-view-dashboard",
-        text: "Dashboard",
-        route: { name: "Dashboard" }
-      },
-      {
-        icon: "mdi-receipt",
-        text: "Material Description",
-        route: { name: "Description" }
-      },
-      {
-        icon: "mdi-file-cog",
-        text: "Generate Invoice",
-        route: { name: "Generate" }
-      },
-      {
-        icon: "mdi-table-large",
-        text: "List Invoices",
-        route: { name: "ListMaterial" }
-      }
-    ]
-  }),
-  computed: {
-    ...mapGetters({
-      user: "auth/getCurrentUser"
-    })
+  data() {
+    return {
+      menuSingleLinks: [
+        {
+          icon: "mdi-view-dashboard",
+          text: "Dashboard",
+          route: { name: "Dashboard" }
+        },
+        {
+          icon: "mdi-receipt",
+          text: "Material Description",
+          route: { name: "Description" }
+        },
+        {
+          icon: "mdi-file-cog",
+          text: "Generate Invoice",
+          route: { name: "Generate" }
+        },
+        {
+          icon: "mdi-table-large",
+          text: "List Invoices",
+          route: { name: "ListMaterial" }
+        }
+      ]
+    };
   }
 };
 </script>

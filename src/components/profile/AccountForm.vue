@@ -67,7 +67,7 @@ export default {
       let results = await this.$validator.validate();
       if (results) {
         try {
-          await this.$store.dispatch("users/updateUser", this.formData);
+          await this.$store.dispatch("auth/updateUser", this.formData);
           this.isSuccess = true;
           this.responseMsg = "Account updated successful";
         } catch (error) {

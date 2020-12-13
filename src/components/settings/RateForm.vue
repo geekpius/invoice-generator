@@ -13,7 +13,7 @@
             required: true,
             decimal: 2
           }"
-          v-model="formValues.vat"
+          v-model="percentage.vat"
           name="vat"
           label="VAT"
           type="number"
@@ -27,7 +27,7 @@
             required: true,
             decimal: 2
           }"
-          v-model="formValues.discount"
+          v-model="percentage.discount"
           name="discount"
           label="DISCOUNT"
           type="number"
@@ -47,38 +47,46 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "InformationForm",
-  props: {
-    formValues: {
-      type: Object,
-      required: true
-    },
-    isSuccess: {
-      type: Boolean,
-      required: true
-    },
-    responseMsg: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
-      isSubmitted: false
+      formData: this.percentage,
+      isSubmitted: false,
+      isSuccess: false,
+      responseText: null
     };
   },
   methods: {
+    async getPercentage() {
+      this.$store.dispatch("settings/fetchPercentage");
+    },
     async updatePercentage() {
       this.isSubmitted = true;
       let results = await this.$validator.validate();
       if (results) {
-        this.$emit("updatePercentage", {
-          vat: this.formValues.vat,
-          discount: this.formValues.discount
-        });
+        try {
+          await this.$store.dispatch("settings/updatePercentage", {
+            vat: this.percentage.vat,
+            discount: this.percentage.discount
+          });
+          this.isSuccess = true;
+          this.responseMsg = "Percentage updated successful";
+        } catch (error) {
+          this.isSuccess = false;
+          this.responseMsg = "Percentage update failed";
+        }
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      percentage: "settings/getPercentage"
+    })
+  },
+  created() {
+    this.getPercentage();
   }
 };
 </script>

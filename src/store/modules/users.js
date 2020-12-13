@@ -16,15 +16,6 @@ export default {
     }
   },
   actions: {
-    updateUser: async (_, payload) => {
-      try {
-        let response = await http.put("auth/user/", payload);
-        localStorage.setItem("user", JSON.stringify(response.data));
-        return response;
-      } catch (error) {
-        return error;
-      }
-    },
     fetchProfile: async ({ commit }) => {
       try {
         let response = await http.get("auth/profile/");

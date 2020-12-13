@@ -85,10 +85,7 @@ export default {
       let result = await this.$validator.validate();
       if (result) {
         this.$store.dispatch("auth/loginUser", this.credentials).then(() => {
-          let timeOut = setTimeout(() => {
-            clearTimeout(timeOut);
-            this.$router.push({ name: "Dashboard" });
-          }, 1000);
+          this.$router.push({ name: "Dashboard" });
         });
         this.isSubmitted = false;
       }

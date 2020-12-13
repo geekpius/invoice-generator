@@ -62,12 +62,13 @@
       </v-menu>
     </v-app-bar>
 
-    <Sidebar :drawer="drawer" v-if="isLoggedIn" />
+    <Sidebar :drawer="drawer" v-if="isLoggedIn" :user="user" />
   </nav>
 </template>
 
 <script>
 import Sidebar from "@/components/Sidebar.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "Navbar",
   components: {
@@ -94,9 +95,10 @@ export default {
     }
   },
   computed: {
-    isLoggedIn() {
-      return this.$store.getters["auth/isLoggedIn"];
-    }
+    ...mapGetters({
+      user: "auth/getCurrentUser",
+      isLoggedIn: "auth/isLoggedIn"
+    })
   }
 };
 </script>

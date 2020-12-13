@@ -1,6 +1,4 @@
 import http from "../http";
-import axios from "axios";
-const BASE_URL = process.env.VUE_APP_BASE_URL;
 
 export default {
   namespaced: true,
@@ -56,6 +54,9 @@ export default {
         localStorage.setItem("token", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
         commit("SET_TOKEN", response.data);
+        http.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.access}`;
         dispatch("getAuthUser", response.data.access);
         return response;
       } catch (error) {
@@ -89,13 +90,9 @@ export default {
         return error;
       }
     },
-    getAuthUser: async ({ commit }, token) => {
+    getAuthUser: async ({ commit }) => {
       try {
-        let response = await axios.get(`${BASE_URL}auth/user/`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        let response = await http.get("auth/user/");
         localStorage.setItem("user", JSON.stringify(response.data));
         commit("SET_USER", JSON.stringify(response.data));
       } catch (error) {
@@ -104,11 +101,22 @@ export default {
     },
     clearLogin: async ({ commit }) => {
       commit("SET_TOKEN", { access: null, refresh: null });
-      commit("SET_USER", {});
+      commit("SET_USER", null);
       localStorage.removeItem("token");
       localStorage.removeItem("refresh");
       localStorage.removeItem("user");
       delete http.defaults.headers.common["Authorization"];
+    },
+    //UPDATE USER
+    updateUser: async ({ commit }, payload) => {
+      try {
+        let response = await http.put("auth/user/", payload);
+        commit("SET_USER", response.data);
+        localStorage.setItem("user", JSON.stringify(response.data));
+        return response;
+      } catch (error) {
+        return error;
+      }
     }
   }
 };
