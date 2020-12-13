@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-dialog v-model="dialog" persistent max-width="500px">
+    <v-dialog v-model="dialog" max-width="500px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on">
           Add New Material Profile
@@ -35,17 +35,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="error darken-1" text @click="dialog = false">
+            Close
+          </v-btn>
           <v-btn
             color="blue darken-1"
-            class="mr-3"
+            class="ml-3"
             :disabled="isBtnClicked"
             text
             @click="saveMaterial"
           >
             Save
-          </v-btn>
-          <v-btn color="error darken-1" text @click="dialog = false">
-            Close
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -80,7 +80,14 @@ export default {
         this.isSubmitted = false;
         this.isBtnClicked = false;
         this.material = null;
+      } else {
+        this.isBtnClicked = false;
       }
+    }
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
     }
   }
 };

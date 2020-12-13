@@ -4,7 +4,7 @@
       class="ml-4"
       :class="isSuccess ? 'success--text' : 'error--text'"
       v-if="isSuccess"
-      >{{ responseMsg }}</span
+      >{{ responseText }}</span
     >
     <v-form @submit.prevent="updateUser">
       <v-card-text>
@@ -34,7 +34,7 @@
       <v-card-actions>
         <v-btn
           class="info pl-8 pr-8 ml-2"
-          :disabled="isSubmitted"
+          :disabled="isBtnClicked"
           type="submit"
         >
           <v-icon left>mdi-cached</v-icon> Update</v-btn
@@ -55,27 +55,31 @@ export default {
   },
   data() {
     return {
-      formData: this.formValues,
       isSubmitted: false,
-      responseMsg: null,
-      isSuccess: false
+      responseText: null,
+      isSuccess: false,
+      isBtnClicked: false
     };
   },
   methods: {
     async updateUser() {
       this.isSubmitted = true;
+      this.isBtnClicked = true;
       let results = await this.$validator.validate();
       if (results) {
-        try {
-          await this.$store.dispatch("auth/updateUser", this.formData);
-          this.isSuccess = true;
-          this.responseMsg = "Account updated successful";
-        } catch (error) {
-          this.isSuccess = false;
-          this.responseMsg = "Account update failed";
-        }
+        await this.$store.dispatch("auth/updateUser", this.formData);
+        this.isSuccess = true;
+        this.responseText = "Account updated successful";
         this.isSubmitted = false;
+        this.isBtnClicked = false;
+      } else {
+        this.isBtnClicked = false;
       }
+    }
+  },
+  computed: {
+    formData() {
+      return this.formValues;
     }
   }
 };

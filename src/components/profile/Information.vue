@@ -9,12 +9,7 @@
               <InformationLogo />
             </v-col>
             <v-col cols="12" sm="6">
-              <InformationForm
-                :form-values="userProfile"
-                @updateProfile="updateProfile"
-                :is-success="isSuccess"
-                :response-msg="responseMsg"
-              />
+              <InformationForm :form-values="userProfile" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -34,24 +29,11 @@ export default {
     InformationLogo
   },
   data() {
-    return {
-      isSuccess: false,
-      responseMsg: ""
-    };
+    return {};
   },
   methods: {
     getProfile() {
       this.$store.dispatch("users/fetchProfile");
-    },
-    async updateProfile(formData) {
-      try {
-        await this.$store.dispatch("users/updateProfile", formData);
-        this.isSuccess = true;
-        this.responseMsg = "Profile updated successful";
-      } catch (error) {
-        this.isSuccess = false;
-        this.responseMsg = "Profile update failed";
-      }
     }
   },
   created() {

@@ -29,6 +29,12 @@ export default {
     },
     SET_MATERIAL_DESCRIPTION: (state, payload) => {
       state.materialDescriptionList.push(payload);
+    },
+    DELETE_MATERIAL_DESCRIPTION: (state, payload) => {
+      let index = state.materialDescriptionList.findIndex(
+        description => description.id == payload
+      );
+      state.materialDescriptionList.splice(index, 1);
     }
   },
   actions: {
@@ -67,6 +73,17 @@ export default {
           payload
         );
         commit("SET_MATERIAL_DESCRIPTION", response.data);
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
+    deleteMaterialDescription: async ({ commit }, payload) => {
+      try {
+        let response = await http.delete(
+          `material-profiles/descriptions/${payload.id}/`
+        );
+        commit("DELETE_MATERIAL_DESCRIPTION", payload.id);
         return response;
       } catch (error) {
         return error;
